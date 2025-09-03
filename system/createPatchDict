@@ -1,7 +1,7 @@
 /*--------------------------------*- C++ -*----------------------------------*\
 | =========                 |                                                 |
 | \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  v2312                                 |
+|  \\    /   O peration     | Version:  v2412                                 |
 |   \\  /    A nd           | Website:  www.openfoam.com                      |
 |    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
@@ -19,24 +19,15 @@ pointSync false;
 patches
 (
     {
-        name        vent;      // ceiling vent
+        name        vent;
         patchInfo { type patch; }
         constructFrom set;
         set ventFaces;
     }
-
     {
-        name        doorSlit;  // the actual opening (slit)
-        patchInfo { type patch; }   // set your BC types in 0/* files
+        name        doorSlit;          // the slit only
+        patchInfo { type patch; }
         constructFrom set;
-        set doorSlitFaces;
-    }
-
-    {
-        name        doorClosed; // solid part of door
-        patchInfo { type wall; }
-        constructFrom set;
-        set doorClosedFaces;
+        set resultFaces;
     }
 );
-// ************************************************************************* //
