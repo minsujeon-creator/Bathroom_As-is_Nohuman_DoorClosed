@@ -16,7 +16,7 @@ FoamFile
 
 actions
 (
-    // Faces on the wall patch that contains the door (adjust 'room' if needed)
+    // Faces on the wall patch that contains the door (change 'room' if needed)
     {
         name    wallFaces;
         type    faceSet;
@@ -28,7 +28,7 @@ actions
         }
     }
 
-    // Vent: faces inside the specified box
+    // Vent (ceiling corner)
     {
         name        ventFaces;
         type        faceSet;
@@ -36,12 +36,11 @@ actions
         source      boxToFace;
         sourceInfo
         {
-            // 0.3 × 0.3 vent on ceiling corner
             box (1.7 0.266 2.24999) (1.9 0.466 2.7);
         }
     }
 
-    // Big door coverage box (slightly larger than door opening)
+    // Big door area (slightly oversized)
     {
         name        doorFaces;
         type        faceSet;
@@ -49,60 +48,11 @@ actions
         source      boxToFace;
         sourceInfo
         {
-            // Door on x=0 wall
-            box (0.0198 -1 0.045) (0.77 0.0001 2.155);
+            box (0.0218 -1 0.046) (0.768 0.0001 2.154);
         }
     }
 
-    // Solid closed-door area to EXCLUDE from the slit
-    {
-        name        doorClosedFaces;
-        type        faceSet;
-        action      new;
-        source      boxToFace;
-        sourceInfo
-        {
-            // Solid door box (inside the big door box)
-            box (0.0248 -1 0.05) (0.765 0.0001 2.15);
-        }
-    }
-
-    // Build doorSlitFaces = doorFaces - doorClosedFaces, limited to wallFaces
-    // 1) copy doorFaces
-    {
-        name        doorSlitFaces;
-        type        faceSet;
-        action      new;
-        source      setToFace;
-        sourceInfo
-        {
-            set doorFaces;
-        }
-    }
-    // 2) subtract the closed door faces
-    {
-        name        doorSlitFaces;
-        type        faceSet;
-        action      delete;
-        source      setToFace;
-        sourceInfo
-        {
-            set doorClosedFaces;
-        }
-    }
-    // 3) keep only faces on the wall patch (safety)
-    {
-        name        doorSlitFaces;
-        type        faceSet;
-        action      subset;
-        source      setToFace;
-        sourceInfo
-        {
-            set wallFaces;
-        }
-    }
-
-    // Your scalar-injection cells
+    // Cells for source term (unchanged)
     {
         name    pooCells;
         type    cellSet;
@@ -113,4 +63,54 @@ actions
             box (0.2 0.85 0.245) (0.5 1.25 0.255);
         }
     }
+
+    // Solid closed-door region to exclude
+    {
+        name        doorClosedFaces;
+        type        faceSet;
+        action      new;
+        source      boxToFace;
+        sourceInfo
+        {
+            box (0.0248 -1 0.05) (0.765 0.0001 2.15);
+        }
+    }
+
+    // ---------- Build the slit: doorFaces minus doorClosedFaces ----------
+    // Start with a copy of the big door set
+    {
+        name        doorSlitFaces;
+        type        faceSet;
+        action      new;
+        source      setToFace;
+        sourceInfo
+        {
+            set doorFaces;
+        }
+    }
+
+    // Subtract the closed part
+    {
+        name        doorSlitFaces;
+        type        faceSet;
+        action      delete;
+        source      setToFace;
+        sourceInfo
+        {
+            set doorClosedFaces;
+        }
+    }
+
+    // Keep only faces that actually lie on the wall patch
+    {
+        name        doorSlitFaces;
+        type        faceSet;
+        action      subset;
+        source      setToFace;
+        sourceInfo
+        {
+            set wallFaces;
+        }
+    }
 );
+// ************************************************************************* //

@@ -18,38 +18,25 @@ pointSync false;
 
 patches
 (
-    // Vent patch from ventFaces
     {
-        name        vent;
-        patchInfo
-        {
-            type patch;
-        }
+        name        vent;      // ceiling vent
+        patchInfo { type patch; }
         constructFrom set;
         set ventFaces;
     }
 
-    // Door SLIT patch (NOT the solid) from doorSlitFaces
     {
-        name        door;
-        patchInfo
-        {
-            type patch;   // set your inflow/outflow/pressure BCs later in 0/* files
-        }
+        name        doorSlit;  // the actual opening (slit)
+        patchInfo { type patch; }   // set your BC types in 0/* files
         constructFrom set;
         set doorSlitFaces;
     }
 
-    // Solid closed-door area remains a wall
     {
-        name        doorClosed;
-        patchInfo
-        {
-            type wall;
-        }
+        name        doorClosed; // solid part of door
+        patchInfo { type wall; }
         constructFrom set;
         set doorClosedFaces;
     }
 );
-
 // ************************************************************************* //
