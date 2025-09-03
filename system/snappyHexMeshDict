@@ -87,7 +87,7 @@ castellatedMeshControls
         refBoxDoor
         {
             mode    inside;
-            levels  ((1e15 2));
+            levels  ((1e15 3));
         }
         refBoxVent
         {
