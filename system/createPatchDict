@@ -14,12 +14,13 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-pointSync false;        // keep mesh topo consistent
+pointSync false;
 
 patches
 (
+    // Vent patch from ventFaces
     {
-        name        vent;          // ceiling vent
+        name        vent;
         patchInfo
         {
             type patch;
@@ -28,17 +29,20 @@ patches
         set ventFaces;
     }
 
+    // Door SLIT patch (NOT the solid) from doorSlitFaces
     {
-        name        door;         // door
+        name        door;
         patchInfo
         {
-            type patch;
+            type patch;   // set your inflow/outflow/pressure BCs later in 0/* files
         }
         constructFrom set;
-        set doorFaces;
+        set doorSlitFaces;
     }
+
+    // Solid closed-door area remains a wall
     {
-        name        doorClosed;         // door
+        name        doorClosed;
         patchInfo
         {
             type wall;
@@ -47,4 +51,5 @@ patches
         set doorClosedFaces;
     }
 );
+
 // ************************************************************************* //

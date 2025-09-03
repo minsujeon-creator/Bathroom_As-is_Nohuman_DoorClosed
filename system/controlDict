@@ -22,7 +22,7 @@ startTime       0;
 
 stopAt          endTime;    // endTime writeNow nextWrite
 
-endTime         10000;
+endTime         7000;
 
 deltaT          1;
 
